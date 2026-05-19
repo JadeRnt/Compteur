@@ -27,49 +27,6 @@ body{font-family:Arial;background:linear-gradient(135deg,#0f172a,#111827);color:
 </div></div>
 
 <script>
-  function remainingSchool() {
-
-    let now = new Date();
-
-    let totalWeeks = 0;
-    let consumedWeeks = 0;
-
-    schoolPeriods.forEach(p => {
-
-        let start = new Date(p[0]);
-        let end = new Date(p[1]);
-
-        // durée totale du bloc
-        let duration =
-        ((end - start)/(1000*60*60*24) + 1)/7;
-
-        totalWeeks += duration;
-
-        // calcul des semaines déjà consommées
-        if(now > start){
-
-            let limit = now < end ? now : end;
-
-            let consumed =
-            ((limit-start)/(1000*60*60*24))/7;
-
-            consumedWeeks += Math.max(
-                0,
-                Math.min(duration,consumed)
-            );
-        }
-
-    });
-
-    let remaining =
-    Math.max(
-        0,
-        totalWeeks-consumedWeeks
-    );
-
-    return remaining.toFixed(1);
-
-}
 const diploma=new Date("2028-09-30T23:59:59");
 const schoolPeriods = [
 
@@ -182,16 +139,33 @@ let days=Math.floor(diff/86400000);
 return days+" jours<br>"+(days/7).toFixed(1)+" semaines";
 }
 function remainingSchool(){
-let now=new Date();
-let consumed=0;
-schoolPeriods.forEach(p=>{
-let s=new Date(p[0]);
-let e=new Date(p[1]);
-if(now>s){
-let lim=now<e?now:e;
-consumed+=Math.max(0,(lim-s)/86400000/7);
-}});
-return Math.max(0,totalSchoolWeeks-consumed).toFixed(1);
+
+    let now = new Date();
+
+    let totalWeeks = schoolPeriods.length;
+    let completedWeeks = 0;
+
+    schoolPeriods.forEach(p=>{
+
+        let end = new Date(p[1]);
+        end.setHours(23,59,59,999);
+
+        // Une semaine est considérée terminée
+        // seulement après sa fin complète
+        if(now > end){
+            completedWeeks++;
+        }
+
+    });
+
+    let remaining =
+    Math.max(
+        0,
+        totalWeeks-completedWeeks
+    );
+
+    return remaining;
+
 }
 function upd(){
 document.getElementById("diploma").innerHTML=fmt(diploma);
