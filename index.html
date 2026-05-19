@@ -27,8 +27,50 @@ body{font-family:Arial;background:linear-gradient(135deg,#0f172a,#111827);color:
 </div></div>
 
 <script>
+  function remainingSchool() {
+
+    let now = new Date();
+
+    let totalWeeks = 0;
+    let consumedWeeks = 0;
+
+    schoolPeriods.forEach(p => {
+
+        let start = new Date(p[0]);
+        let end = new Date(p[1]);
+
+        // durée totale du bloc
+        let duration =
+        ((end - start)/(1000*60*60*24) + 1)/7;
+
+        totalWeeks += duration;
+
+        // calcul des semaines déjà consommées
+        if(now > start){
+
+            let limit = now < end ? now : end;
+
+            let consumed =
+            ((limit-start)/(1000*60*60*24))/7;
+
+            consumedWeeks += Math.max(
+                0,
+                Math.min(duration,consumed)
+            );
+        }
+
+    });
+
+    let remaining =
+    Math.max(
+        0,
+        totalWeeks-consumedWeeks
+    );
+
+    return remaining.toFixed(1);
+
+}
 const diploma=new Date("2028-09-30T23:59:59");
-const totalSchoolWeeks = 65;
 const schoolPeriods = [
 
   // ===== 3A • 2025 → 2026 =====
