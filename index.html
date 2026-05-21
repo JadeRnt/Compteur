@@ -1,176 +1,276 @@
-
-<!DOCTYPE html><html><head><meta charset="UTF-8">
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
 <title>Dashboard Études</title>
+
 <style>
-body{font-family:Arial;background:linear-gradient(135deg,#0f172a,#111827);color:white;padding:30px}
-.section{margin-bottom:40px}
-.title{font-size:30px;border-bottom:1px solid #555;padding-bottom:8px;margin-bottom:20px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px}
-.card{background:rgba(255,255,255,.08);padding:20px;border-radius:22px}
-.big{font-size:34px;font-weight:bold}
-</style></head><body>
+body{
+font-family:Arial;
+background:linear-gradient(135deg,#0f172a,#111827);
+color:white;
+padding:30px
+}
+
+.section{
+margin-bottom:40px
+}
+
+.title{
+font-size:30px;
+border-bottom:1px solid #555;
+padding-bottom:8px;
+margin-bottom:20px
+}
+
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+gap:20px
+}
+
+.card{
+background:rgba(255,255,255,.08);
+padding:20px;
+border-radius:22px;
+backdrop-filter:blur(10px);
+}
+
+.big{
+font-size:34px;
+font-weight:bold
+}
+</style>
+
+</head>
+
+<body>
+
 <h1>Dashboard Études</h1>
 
 <div class=section>
+
 <div class=title>Vue globale</div>
+
 <div class=grid>
-<div class=card><h3>Fin du diplôme</h3><div id=diploma class=big></div></div>
-<div class=card><h3>Semaines de cours restantes</h3><div id=weeks class=big></div></div>
-</div></div>
+
+<div class=card>
+<h3>Fin du diplôme</h3>
+<div id=diploma class=big></div>
+</div>
+
+<div class=card>
+<h3>Semaines de cours restantes</h3>
+<div id=weeks class=big></div>
+</div>
+
+<div class=card>
+<h3>Argent gagné depuis le début des études</h3>
+<div id=money class=big></div>
+</div>
+
+</div>
+</div>
+
 
 <div class=section>
+
 <div class=title>Fin des cours par année</div>
+
 <div class=grid>
-<div class=card><h3>3A</h3><div id=c1 class=big></div></div>
-<div class=card><h3>4A</h3><div id=c2 class=big></div></div>
-<div class=card><h3>5A</h3><div id=c3 class=big></div></div>
-</div></div>
+
+<div class=card>
+<h3>3A</h3>
+<div id=c1 class=big></div>
+</div>
+
+<div class=card>
+<h3>4A</h3>
+<div id=c2 class=big></div>
+</div>
+
+<div class=card>
+<h3>5A</h3>
+<div id=c3 class=big></div>
+</div>
+
+</div>
+</div>
+
 
 <script>
+
 const diploma=new Date("2028-09-30T23:59:59");
-const schoolPeriods = [
 
-  // ===== 3A • 2025 → 2026 =====
+const salaryPerMonth=1291.61;
 
-  ["2025-10-13","2025-10-17"],
-  ["2025-10-20","2025-10-24"],
+// début de la formation
+const studyStart=new Date("2025-09-13T00:00:00");
 
-  ["2025-11-10","2025-11-14"],
-  ["2025-11-17","2025-11-21"],
+const schoolPeriods=[
 
-  ["2025-12-08","2025-12-12"],
-  ["2025-12-15","2025-12-19"],
+["2025-10-13","2025-10-17"],
+["2025-10-20","2025-10-24"],
 
-  ["2026-01-05","2026-01-09"],
-  ["2026-01-12","2026-01-16"],
-  ["2026-01-19","2026-01-23"],
+["2025-11-10","2025-11-14"],
+["2025-11-17","2025-11-21"],
 
-  ["2026-02-09","2026-02-13"],
-  ["2026-02-16","2026-02-20"],
-  ["2026-02-23","2026-02-27"],
+["2025-12-08","2025-12-12"],
+["2025-12-15","2025-12-19"],
 
-  ["2026-03-16","2026-03-20"],
-  ["2026-03-23","2026-03-27"],
-  ["2026-03-30","2026-04-03"],
+["2026-01-05","2026-01-09"],
+["2026-01-12","2026-01-16"],
+["2026-01-19","2026-01-23"],
 
-  ["2026-04-20","2026-04-24"],
-  ["2026-04-27","2026-04-30"],
+["2026-02-09","2026-02-13"],
+["2026-02-16","2026-02-20"],
+["2026-02-23","2026-02-27"],
 
-  ["2026-05-04","2026-05-07"],
-  ["2026-05-26","2026-05-29"],
+["2026-03-16","2026-03-20"],
+["2026-03-23","2026-03-27"],
+["2026-03-30","2026-04-03"],
 
-  ["2026-06-01","2026-06-05"],
-  ["2026-06-08","2026-06-12"],
+["2026-04-20","2026-04-24"],
+["2026-04-27","2026-04-30"],
 
-  ["2026-06-29","2026-07-03"],
-  ["2026-07-06","2026-07-10"],
+["2026-05-04","2026-05-07"],
+["2026-05-26","2026-05-29"],
 
+["2026-06-01","2026-06-05"],
+["2026-06-08","2026-06-12"],
 
-  // ===== 4A • 2026 → 2027 =====
-
-  ["2026-08-31","2026-09-04"],
-  ["2026-09-07","2026-09-11"],
-
-  ["2026-09-28","2026-10-02"],
-  ["2026-10-05","2026-10-09"],
-  ["2026-10-26","2026-10-30"],
-
-  ["2026-11-02","2026-11-06"],
-  ["2026-11-09","2026-11-13"],
-
-  ["2026-11-30","2026-12-04"],
-  ["2026-12-07","2026-12-11"],
-  ["2026-12-14","2026-12-18"],
-
-  ["2027-01-11","2027-01-15"],
-  ["2027-01-18","2027-01-22"],
-
-  ["2027-02-08","2027-02-12"],
-  ["2027-02-15","2027-02-19"],
-  ["2027-02-22","2027-02-26"],
-
-  ["2027-03-15","2027-03-19"],
-  ["2027-03-22","2027-03-26"],
-
-  ["2027-04-12","2027-04-16"],
-  ["2027-04-19","2027-04-23"],
-  ["2027-04-26","2027-04-30"],
-
-
-  // ===== 5A • 2027 → 2028 =====
-
-  ["2027-08-30","2027-09-03"],
-  ["2027-09-06","2027-09-10"],
-  ["2027-09-13","2027-09-17"],
-
-  ["2027-10-04","2027-10-08"],
-  ["2027-10-11","2027-10-15"],
-  ["2027-10-18","2027-10-22"],
-
-  ["2027-11-08","2027-11-12"],
-  ["2027-11-15","2027-11-19"],
-
-  ["2027-12-06","2027-12-10"],
-  ["2027-12-13","2027-12-17"],
-
-  ["2028-01-03","2028-01-07"],
-  ["2028-01-10","2028-01-14"],
-  ["2028-01-17","2028-01-21"],
-
-  ["2028-02-07","2028-02-11"],
-  ["2028-02-14","2028-02-18"],
-  ["2028-02-21","2028-02-25"],
-
-  ["2028-03-13","2028-03-17"],
-  ["2028-03-20","2028-03-24"],
-  ["2028-03-27","2028-03-31"],
-
-  ["2028-04-17","2028-04-21"],
-  ["2028-04-24","2028-04-28"],
-  ["2028-05-02","2028-05-05"]
+["2026-06-29","2026-07-03"],
+["2026-07-06","2026-07-10"]
 
 ];
-const dates=[["c1",new Date("2026-07-10")],["c2",new Date("2027-04-30")],["c3",new Date("2028-05-05")]];
+
+const dates=[
+
+["c1",new Date("2026-07-10")],
+["c2",new Date("2027-04-30")],
+["c3",new Date("2028-05-05")]
+
+];
 
 function fmt(d){
+
 let diff=d-new Date();
-if(diff<=0)return "Terminé ✅";
+
+if(diff<=0)
+return "Terminé ✅";
+
 let days=Math.floor(diff/86400000);
-return days+" jours<br>"+(days/7).toFixed(1)+" semaines";
+
+return days+
+" jours<br>"+
+(days/7).toFixed(1)+
+" semaines";
+
 }
+
 function remainingSchool(){
 
-    let now = new Date();
+let now=new Date();
 
-    let totalWeeks = schoolPeriods.length;
-    let completedWeeks = 0;
+let totalWeeks=schoolPeriods.length;
 
-    schoolPeriods.forEach(p=>{
+let completedWeeks=0;
 
-        let end = new Date(p[1]);
-        end.setHours(23,59,59,999);
+schoolPeriods.forEach(p=>{
 
-        // Une semaine est considérée terminée
-        // seulement après sa fin complète
-        if(now > end){
-            completedWeeks++;
-        }
+let end=new Date(p[1]);
 
-    });
+end.setHours(
+23,
+59,
+59,
+999
+);
 
-    let remaining =
-    Math.max(
-        0,
-        totalWeeks-completedWeeks
-    );
+if(now>end){
 
-    return remaining;
+completedWeeks++;
 
 }
+
+});
+
+return Math.max(
+0,
+totalWeeks-completedWeeks
+);
+
+}
+
+
+function earnedMoney(){
+
+let now=new Date();
+
+let elapsed=now-studyStart;
+
+if(elapsed<=0)
+return "0,00 €";
+
+let msPerMonth=
+365.2425/12*
+24*
+60*
+60*
+1000;
+
+let earned=
+(elapsed/msPerMonth)
+*
+salaryPerMonth;
+
+return earned.toLocaleString(
+"fr-FR",
+{
+minimumFractionDigits:2,
+maximumFractionDigits:2
+}
+)+" €";
+
+}
+
+
 function upd(){
-document.getElementById("diploma").innerHTML=fmt(diploma);
-document.getElementById("weeks").innerHTML=remainingSchool()+" semaines";
-dates.forEach(d=>document.getElementById(d[0]).innerHTML=fmt(d[1]));
+
+document.getElementById(
+"diploma"
+).innerHTML=
+fmt(diploma);
+
+document.getElementById(
+"weeks"
+).innerHTML=
+remainingSchool()+
+" semaines";
+
+document.getElementById(
+"money"
+).innerHTML=
+earnedMoney();
+
+dates.forEach(
+d=>
+document.getElementById(
+d[0]
+).innerHTML=
+fmt(d[1])
+);
+
 }
-upd();setInterval(upd,1000);
-</script></body></html>
+
+upd();
+
+setInterval(
+upd,
+1000
+);
+
+</script>
+
+</body>
+</html>
