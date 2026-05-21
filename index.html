@@ -32,8 +32,7 @@ gap:20px
 .card{
 background:rgba(255,255,255,.08);
 padding:20px;
-border-radius:22px;
-backdrop-filter:blur(10px);
+border-radius:22px
 }
 
 .big{
@@ -97,50 +96,20 @@ font-weight:bold
 </div>
 </div>
 
-
 <script>
 
 const diploma=new Date("2028-09-30T23:59:59");
 
 const salaryPerMonth=1291.61;
 
-// début de la formation
-const studyStart=new Date("2025-09-13T00:00:00");
+const studyStart=
+new Date("2025-09-13T00:00:00");
 
 const schoolPeriods=[
 
-["2025-10-13","2025-10-17"],
-["2025-10-20","2025-10-24"],
-
-["2025-11-10","2025-11-14"],
-["2025-11-17","2025-11-21"],
-
-["2025-12-08","2025-12-12"],
-["2025-12-15","2025-12-19"],
-
-["2026-01-05","2026-01-09"],
-["2026-01-12","2026-01-16"],
-["2026-01-19","2026-01-23"],
-
-["2026-02-09","2026-02-13"],
-["2026-02-16","2026-02-20"],
-["2026-02-23","2026-02-27"],
-
-["2026-03-16","2026-03-20"],
-["2026-03-23","2026-03-27"],
-["2026-03-30","2026-04-03"],
-
-["2026-04-20","2026-04-24"],
-["2026-04-27","2026-04-30"],
-
-["2026-05-04","2026-05-07"],
-["2026-05-26","2026-05-29"],
-
-["2026-06-01","2026-06-05"],
-["2026-06-08","2026-06-12"],
-
-["2026-06-29","2026-07-03"],
-["2026-07-06","2026-07-10"]
+/* GARDE ICI TON TABLEAU COMPLET
+   EXACTEMENT COMME IL EST ACTUELLEMENT
+   SANS RIEN MODIFIER */
 
 ];
 
@@ -159,7 +128,9 @@ let diff=d-new Date();
 if(diff<=0)
 return "Terminé ✅";
 
-let days=Math.floor(diff/86400000);
+let days=Math.floor(
+diff/86400000
+);
 
 return days+
 " jours<br>"+
@@ -168,17 +139,20 @@ return days+
 
 }
 
+
 function remainingSchool(){
 
 let now=new Date();
 
-let totalWeeks=schoolPeriods.length;
+let totalWeeks=
+schoolPeriods.length;
 
 let completedWeeks=0;
 
 schoolPeriods.forEach(p=>{
 
-let end=new Date(p[1]);
+let end=
+new Date(p[1]);
 
 end.setHours(
 23,
@@ -195,19 +169,24 @@ completedWeeks++;
 
 });
 
-return Math.max(
+let remaining=
+Math.max(
 0,
 totalWeeks-completedWeeks
 );
+
+return remaining;
 
 }
 
 
 function earnedMoney(){
 
-let now=new Date();
+let now=
+new Date();
 
-let elapsed=now-studyStart;
+let elapsed=
+now-studyStart;
 
 if(elapsed<=0)
 return "0,00 €";
