@@ -27,7 +27,7 @@ body{
 
 .grid{
     display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+    grid-template-columns:repeat(3,1fr);
     gap:20px;
 }
 
@@ -40,12 +40,22 @@ body{
 .big{
     font-size:34px;
     font-weight:bold;
-    line-height:1.4;
 }
 
-.timeBlock{
-    display:flex;
-    flex-direction:column;
+@media(max-width:1000px){
+
+.grid{
+    grid-template-columns:repeat(2,1fr);
+}
+
+}
+
+@media(max-width:700px){
+
+.grid{
+    grid-template-columns:1fr;
+}
+
 }
 
 </style>
@@ -123,7 +133,6 @@ body{
 
 </div>
 
-
 <script>
 
 const diploma=new Date("2028-09-30T23:59:59");
@@ -132,8 +141,10 @@ const schoolPeriods=[
 
 ["2025-10-13","2025-10-17"],
 ["2025-10-20","2025-10-24"],
+
 ["2025-11-10","2025-11-14"],
 ["2025-11-17","2025-11-21"],
+
 ["2025-12-08","2025-12-12"],
 ["2025-12-15","2025-12-19"],
 
@@ -163,6 +174,7 @@ const schoolPeriods=[
 
 ["2026-08-31","2026-09-04"],
 ["2026-09-07","2026-09-11"],
+
 ["2026-09-28","2026-10-02"],
 ["2026-10-05","2026-10-09"],
 ["2026-10-26","2026-10-30"],
@@ -234,38 +246,34 @@ if(diff<=0) return "Terminé ✅";
 
 let days=Math.floor(diff/86400000);
 
-return `
-<div class="timeBlock">
-<div>${days} jours</div>
-<div>${(days/7).toFixed(1)} semaines</div>
-</div>
-`;
+return days+" jours<br>"+(days/7).toFixed(1)+" semaines";
 
 }
 
 function remainingYearWeeks(year){
 
-let count=0;
 let now=new Date();
+
+let count=0;
 
 schoolPeriods.forEach(p=>{
 
 let start=new Date(p[0]);
 let end=new Date(p[1]);
 
-let y;
+let currentYear;
 
 if(start<new Date("2026-08-01")){
-y=3;
+currentYear=3;
 }
 else if(start<new Date("2027-08-01")){
-y=4;
+currentYear=4;
 }
 else{
-y=5;
+currentYear=5;
 }
 
-if(y===year && now<=end){
+if(currentYear===year && now<=end){
 count++;
 }
 
@@ -277,9 +285,12 @@ return count;
 
 function upd(){
 
-document.getElementById("c1").innerHTML=fmt(dates[0][1]);
-document.getElementById("c2").innerHTML=fmt(dates[1][1]);
-document.getElementById("c3").innerHTML=fmt(dates[2][1]);
+dates.forEach(d=>{
+
+document.getElementById(d[0]).innerHTML=
+fmt(d[1]);
+
+});
 
 document.getElementById("w1").innerHTML=
 remainingYearWeeks(3)+" semaines";
@@ -293,8 +304,6 @@ remainingYearWeeks(5)+" semaines";
 }
 
 upd();
-
-setInterval(upd,1000);
 
 </script>
 
