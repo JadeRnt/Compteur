@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
 <meta charset="UTF-8">
 <title>Dashboard Études</title>
 
 <style>
+
 body{
     font-family:Arial;
     background:linear-gradient(135deg,#0f172a,#111827);
@@ -38,7 +40,14 @@ body{
 .big{
     font-size:34px;
     font-weight:bold;
+    line-height:1.4;
 }
+
+.timeBlock{
+    display:flex;
+    flex-direction:column;
+}
+
 </style>
 
 </head>
@@ -46,6 +55,7 @@ body{
 <body>
 
 <h1>Dashboard Études</h1>
+
 
 <div class="section">
 
@@ -69,6 +79,7 @@ body{
 </div>
 
 </div>
+
 </div>
 
 
@@ -109,21 +120,20 @@ body{
 </div>
 
 </div>
+
 </div>
 
 
 <script>
 
-const diploma = new Date("2028-09-30T23:59:59");
+const diploma=new Date("2028-09-30T23:59:59");
 
 const schoolPeriods=[
 
 ["2025-10-13","2025-10-17"],
 ["2025-10-20","2025-10-24"],
-
 ["2025-11-10","2025-11-14"],
 ["2025-11-17","2025-11-21"],
-
 ["2025-12-08","2025-12-12"],
 ["2025-12-15","2025-12-19"],
 
@@ -151,10 +161,8 @@ const schoolPeriods=[
 ["2026-06-29","2026-07-03"],
 ["2026-07-06","2026-07-10"],
 
-
 ["2026-08-31","2026-09-04"],
 ["2026-09-07","2026-09-11"],
-
 ["2026-09-28","2026-10-02"],
 ["2026-10-05","2026-10-09"],
 ["2026-10-26","2026-10-30"],
@@ -179,7 +187,6 @@ const schoolPeriods=[
 ["2027-04-12","2027-04-16"],
 ["2027-04-19","2027-04-23"],
 ["2027-04-26","2027-04-30"],
-
 
 ["2027-08-30","2027-09-03"],
 ["2027-09-06","2027-09-10"],
@@ -214,15 +221,10 @@ const schoolPeriods=[
 ];
 
 const dates=[
-
 ["c1",new Date("2026-07-10")],
 ["c2",new Date("2027-04-30")],
 ["c3",new Date("2028-05-05")]
-
 ];
-
-const monthlySalary=1291.61;
-const studyStart=new Date("2025-10-13T00:00:00");
 
 function fmt(d){
 
@@ -232,73 +234,38 @@ if(diff<=0) return "Terminé ✅";
 
 let days=Math.floor(diff/86400000);
 
-return days+
-" jours<br>"+
-(days/7).toFixed(1)+
-" semaines";
-
-}
-
-function remainingSchool(){
-
-let now=new Date();
-
-let totalWeeks=schoolPeriods.length;
-let completedWeeks=0;
-
-schoolPeriods.forEach(p=>{
-
-let end=new Date(p[1]);
-
-end.setHours(23,59,59,999);
-
-if(now>end){
-completedWeeks++;
-}
-
-});
-
-return Math.max(
-0,
-totalWeeks-completedWeeks
-);
+return `
+<div class="timeBlock">
+<div>${days} jours</div>
+<div>${(days/7).toFixed(1)} semaines</div>
+</div>
+`;
 
 }
 
 function remainingYearWeeks(year){
 
-let now=new Date();
-
 let count=0;
+let now=new Date();
 
 schoolPeriods.forEach(p=>{
 
 let start=new Date(p[0]);
 let end=new Date(p[1]);
 
-end.setHours(
-23,
-59,
-59,
-999
-);
-
-let currentYear;
+let y;
 
 if(start<new Date("2026-08-01")){
-currentYear=3;
+y=3;
 }
 else if(start<new Date("2027-08-01")){
-currentYear=4;
+y=4;
 }
 else{
-currentYear=5;
+y=5;
 }
 
-if(
-currentYear===year &&
-now<=end
-){
+if(y===year && now<=end){
 count++;
 }
 
@@ -308,89 +275,26 @@ return count;
 
 }
 
-function moneyEarned(){
-
-let now=new Date();
-
-if(now<studyStart){
-return "0.00 €";
-}
-
-let elapsed=now-studyStart;
-
-const avgMonthMs=
-30.4375*
-24*
-60*
-60*
-1000;
-
-let money=
-(elapsed/avgMonthMs)
-*monthlySalary;
-
-return money.toLocaleString(
-"fr-FR",
-{
-minimumFractionDigits:2,
-maximumFractionDigits:2
-}
-)+" €";
-
-}
-
 function upd(){
 
-document.getElementById(
-"diploma"
-).innerHTML=
-fmt(diploma);
+document.getElementById("c1").innerHTML=fmt(dates[0][1]);
+document.getElementById("c2").innerHTML=fmt(dates[1][1]);
+document.getElementById("c3").innerHTML=fmt(dates[2][1]);
 
-document.getElementById(
-"weeks"
-).innerHTML=
-remainingSchool()+" semaines";
+document.getElementById("w1").innerHTML=
+remainingYearWeeks(3)+" semaines";
 
-document.getElementById(
-"money"
-).innerHTML=
-moneyEarned();
+document.getElementById("w2").innerHTML=
+remainingYearWeeks(4)+" semaines";
 
-dates.forEach(d=>{
-
-document.getElementById(
-d[0]
-).innerHTML=
-fmt(d[1]);
-
-});
-
-document.getElementById(
-"w1"
-).innerHTML=
-remainingYearWeeks(3)
-+" semaines";
-
-document.getElementById(
-"w2"
-).innerHTML=
-remainingYearWeeks(4)
-+" semaines";
-
-document.getElementById(
-"w3"
-).innerHTML=
-remainingYearWeeks(5)
-+" semaines";
+document.getElementById("w3").innerHTML=
+remainingYearWeeks(5)+" semaines";
 
 }
 
 upd();
 
-setInterval(
-upd,
-1000
-);
+setInterval(upd,1000);
 
 </script>
 
