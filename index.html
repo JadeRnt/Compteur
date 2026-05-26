@@ -25,7 +25,17 @@ body{
     margin-bottom:20px;
 }
 
+/* Vue globale */
+
 .grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+    gap:20px;
+}
+
+/* Fin des cours */
+
+.yearGrid{
     display:grid;
     grid-template-columns:repeat(3,1fr);
     gap:20px;
@@ -44,7 +54,7 @@ body{
 
 @media(max-width:1000px){
 
-.grid{
+.yearGrid{
     grid-template-columns:repeat(2,1fr);
 }
 
@@ -52,7 +62,7 @@ body{
 
 @media(max-width:700px){
 
-.grid{
+.yearGrid{
     grid-template-columns:1fr;
 }
 
@@ -97,7 +107,7 @@ body{
 
 <div class="title">Fin des cours par année</div>
 
-<div class="grid">
+<div class="yearGrid">
 
 <div class="card">
 <h3>3A</h3>
@@ -139,6 +149,8 @@ const diploma=new Date("2028-09-30T23:59:59");
 
 const schoolPeriods=[
 
+// ===== 3A =====
+
 ["2025-10-13","2025-10-17"],
 ["2025-10-20","2025-10-24"],
 
@@ -172,6 +184,9 @@ const schoolPeriods=[
 ["2026-06-29","2026-07-03"],
 ["2026-07-06","2026-07-10"],
 
+
+// ===== 4A =====
+
 ["2026-08-31","2026-09-04"],
 ["2026-09-07","2026-09-11"],
 
@@ -199,6 +214,9 @@ const schoolPeriods=[
 ["2027-04-12","2027-04-16"],
 ["2027-04-19","2027-04-23"],
 ["2027-04-26","2027-04-30"],
+
+
+// ===== 5A =====
 
 ["2027-08-30","2027-09-03"],
 ["2027-09-06","2027-09-10"],
@@ -238,11 +256,16 @@ const dates=[
 ["c3",new Date("2028-05-05")]
 ];
 
+const monthlySalary=1291.61;
+const studyStart=new Date("2025-10-13");
+
 function fmt(d){
 
 let diff=d-new Date();
 
-if(diff<=0) return "Terminé ✅";
+if(diff<=0){
+return "Terminé ✅";
+}
 
 let days=Math.floor(diff/86400000);
 
@@ -250,13 +273,26 @@ return days+" jours<br>"+(days/7).toFixed(1)+" semaines";
 
 }
 
+function remainingSchool(){
+
+let now=new Date();
+
+return schoolPeriods.filter(p=>{
+
+let end=new Date(p[1]);
+end.setHours(23,59,59,999);
+
+return now<=end;
+
+}).length;
+
+}
+
 function remainingYearWeeks(year){
 
 let now=new Date();
 
-let count=0;
-
-schoolPeriods.forEach(p=>{
+return schoolPeriods.filter(p=>{
 
 let start=new Date(p[0]);
 let end=new Date(p[1]);
@@ -273,17 +309,45 @@ else{
 currentYear=5;
 }
 
-if(currentYear===year && now<=end){
-count++;
+return currentYear===year && now<=end;
+
+}).length;
+
 }
 
-});
+function moneyEarned(){
 
-return count;
+let now=new Date();
+
+if(now<studyStart){
+return "0.00 €";
+}
+
+let elapsed=now-studyStart;
+
+const avgMonthMs=30.4375*24*60*60*1000;
+
+let money=(elapsed/avgMonthMs)*monthlySalary;
+
+return money.toLocaleString(
+"fr-FR",
+{
+minimumFractionDigits:2,
+maximumFractionDigits:2
+}
+)+" €";
 
 }
 
 function upd(){
+
+document.getElementById("diploma").innerHTML=fmt(diploma);
+
+document.getElementById("weeks").innerHTML=
+remainingSchool()+" semaines";
+
+document.getElementById("money").innerHTML=
+moneyEarned();
 
 dates.forEach(d=>{
 
@@ -304,6 +368,8 @@ remainingYearWeeks(5)+" semaines";
 }
 
 upd();
+
+setInterval(upd,1000);
 
 </script>
 
