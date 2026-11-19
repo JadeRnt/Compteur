@@ -1,156 +1,292 @@
 <!DOCTYPE html>
 <html lang="fr">
-
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Dashboard Études</title>
 
 <style>
+:root{
+    --bg1:#0b1020;
+    --bg2:#141b34;
+    --text:#e8ecf8;
+    --muted:#8d97b5;
+    --line:rgba(255,255,255,.08);
+    --card:rgba(255,255,255,.045);
+    --c3:#38bdf8;
+    --c4:#a78bfa;
+    --c5:#f472b6;
+    --gold:#fbbf24;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
 
 body{
-    font-family:Arial;
-    background:linear-gradient(135deg,#0f172a,#111827);
-    color:white;
-    padding:30px;
+    font-family:Inter,"Segoe UI",system-ui,-apple-system,Arial,sans-serif;
+    color:var(--text);
+    min-height:100vh;
+    padding:48px 32px 64px;
+    background:
+        radial-gradient(900px 500px at 10% -10%,rgba(56,189,248,.14),transparent 60%),
+        radial-gradient(800px 500px at 100% 0%,rgba(167,139,250,.14),transparent 60%),
+        radial-gradient(800px 600px at 50% 120%,rgba(244,114,182,.10),transparent 60%),
+        linear-gradient(160deg,var(--bg1),var(--bg2));
+    background-attachment:fixed;
 }
 
-.section{
-    margin-bottom:40px;
+.wrap{max-width:1180px;margin:0 auto}
+
+header{margin-bottom:44px}
+header h1{
+    font-size:40px;
+    font-weight:800;
+    letter-spacing:-.02em;
+    background:linear-gradient(90deg,#fff,#aab4d6);
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+}
+header p{color:var(--muted);margin-top:6px;font-size:15px}
+
+.section-title{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    font-size:12px;
+    font-weight:700;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:var(--muted);
+    margin-bottom:18px;
+}
+.section-title::after{
+    content:"";
+    flex:1;
+    height:1px;
+    background:var(--line);
 }
 
-.title{
-    font-size:30px;
-    border-bottom:1px solid #555;
-    padding-bottom:8px;
-    margin-bottom:20px;
+.section{margin-bottom:48px}
+
+.card{
+    position:relative;
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:24px;
+    padding:26px;
+    backdrop-filter:blur(14px);
+    -webkit-backdrop-filter:blur(14px);
+    box-shadow:0 10px 40px rgba(0,0,0,.25);
+    overflow:hidden;
+    transition:transform .25s ease,border-color .25s ease;
+}
+.card:hover{transform:translateY(-3px);border-color:rgba(255,255,255,.16)}
+
+.label{
+    font-size:13px;
+    color:var(--muted);
+    font-weight:600;
+    margin-bottom:12px;
+    display:flex;
+    align-items:center;
+    gap:8px;
+}
+
+.big{
+    font-size:34px;
+    font-weight:800;
+    letter-spacing:-.02em;
+    font-variant-numeric:tabular-nums;
+    line-height:1.1;
+}
+.sub{
+    margin-top:8px;
+    font-size:14px;
+    color:var(--muted);
+    font-variant-numeric:tabular-nums;
 }
 
 /* Vue globale */
-
 .grid{
     display:grid;
     grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
     gap:20px;
 }
+.card.global::before{
+    content:"";
+    position:absolute;
+    inset:0 0 auto 0;
+    height:3px;
+    background:linear-gradient(90deg,var(--c3),var(--c4),var(--c5));
+}
+.money{color:var(--gold)}
 
-/* Fin des cours */
-
+/* Années */
 .yearGrid{
     display:grid;
     grid-template-columns:repeat(3,1fr);
     gap:20px;
 }
-
-.card{
-    background:rgba(255,255,255,.08);
-    padding:20px;
-    border-radius:22px;
+.year{display:flex;flex-direction:column;gap:22px;padding:28px}
+.year::before{
+    content:"";
+    position:absolute;
+    inset:0 0 auto 0;
+    height:4px;
+    background:var(--accent);
 }
+.year .badge{
+    align-self:flex-start;
+    font-size:13px;
+    font-weight:800;
+    letter-spacing:.08em;
+    padding:6px 14px;
+    border-radius:999px;
+    color:var(--accent);
+    background:color-mix(in srgb,var(--accent) 14%,transparent);
+    border:1px solid color-mix(in srgb,var(--accent) 35%,transparent);
+}
+.y3{--accent:var(--c3)}
+.y4{--accent:var(--c4)}
+.y5{--accent:var(--c5)}
 
-.big{
-    font-size:34px;
-    font-weight:bold;
+.block .label{margin-bottom:8px}
+.block .big{color:var(--accent)}
+.divider{height:1px;background:var(--line)}
+
+.bar{
+    margin-top:14px;
+    height:8px;
+    border-radius:999px;
+    background:rgba(255,255,255,.08);
+    overflow:hidden;
+}
+.bar > i{
+    display:block;
+    height:100%;
+    width:0;
+    border-radius:999px;
+    background:var(--accent,var(--c4));
+    transition:width .8s ease;
+}
+.card.global .bar > i{background:linear-gradient(90deg,var(--c3),var(--c4),var(--c5))}
+
+.done{
+    color:#4ade80 !important;
 }
 
 @media(max-width:1000px){
-
-.yearGrid{
-    grid-template-columns:repeat(2,1fr);
+    .yearGrid{grid-template-columns:1fr}
 }
-
+@media(max-width:600px){
+    body{padding:28px 16px 48px}
+    header h1{font-size:30px}
+    .big{font-size:28px}
 }
-
-@media(max-width:700px){
-
-.yearGrid{
-    grid-template-columns:1fr;
-}
-
-}
-
 </style>
-
 </head>
 
 <body>
+<div class="wrap">
 
-<h1>Dashboard Études</h1>
-
-
-<div class="section">
-
-<div class="title">Vue globale</div>
-
-<div class="grid">
-
-<div class="card">
-<h3>Fin du diplôme</h3>
-<div id="diploma" class="big"></div>
-</div>
-
-<div class="card">
-<h3>Semaines de cours restantes</h3>
-<div id="weeks" class="big"></div>
-</div>
-
-<div class="card">
-<h3>Sous gagnés depuis le début des études</h3>
-<div id="money" class="big"></div>
-</div>
-
-</div>
-
-</div>
-
+<header>
+    <h1>Dashboard Études</h1>
+    <p id="today"></p>
+</header>
 
 <div class="section">
+    <div class="section-title">Vue globale</div>
+    <div class="grid">
 
-<div class="title">Fin des cours par année</div>
+        <div class="card global">
+            <div class="label">🎓 Fin du diplôme</div>
+            <div id="diploma" class="big"></div>
+            <div id="diplomaSub" class="sub"></div>
+            <div class="bar"><i id="diplomaBar"></i></div>
+        </div>
 
-<div class="yearGrid">
+        <div class="card global">
+            <div class="label">📚 Semaines de cours restantes</div>
+            <div id="weeks" class="big"></div>
+            <div id="weeksSub" class="sub"></div>
+            <div class="bar"><i id="weeksBar"></i></div>
+        </div>
 
-<div class="card">
-<h3>3A</h3>
-<div id="c1" class="big"></div>
+        <div class="card global">
+            <div class="label">💶 Sous gagnés depuis le début des études</div>
+            <div id="money" class="big money"></div>
+            <div class="sub">Depuis le 13 octobre 2025</div>
+        </div>
+
+    </div>
 </div>
 
-<div class="card">
-<h3>4A</h3>
-<div id="c2" class="big"></div>
-</div>
+<div class="section">
+    <div class="section-title">Avant la fin de chaque année</div>
+    <div class="yearGrid">
 
-<div class="card">
-<h3>5A</h3>
-<div id="c3" class="big"></div>
-</div>
+        <div class="card year y3">
+            <span class="badge">3A</span>
+            <div class="block">
+                <div class="label">⏳ Temps avant la fin de l'année</div>
+                <div id="c1" class="big"></div>
+                <div id="c1s" class="sub"></div>
+            </div>
+            <div class="divider"></div>
+            <div class="block">
+                <div class="label">🗓️ Semaines de cours restantes</div>
+                <div id="w1" class="big"></div>
+                <div class="bar"><i id="b1"></i></div>
+                <div id="w1s" class="sub"></div>
+            </div>
+        </div>
 
-<div class="card">
-<h3>Semaines restantes 3A</h3>
-<div id="w1" class="big"></div>
-</div>
+        <div class="card year y4">
+            <span class="badge">4A</span>
+            <div class="block">
+                <div class="label">⏳ Temps avant la fin de l'année</div>
+                <div id="c2" class="big"></div>
+                <div id="c2s" class="sub"></div>
+            </div>
+            <div class="divider"></div>
+            <div class="block">
+                <div class="label">🗓️ Semaines de cours restantes</div>
+                <div id="w2" class="big"></div>
+                <div class="bar"><i id="b2"></i></div>
+                <div id="w2s" class="sub"></div>
+            </div>
+        </div>
 
-<div class="card">
-<h3>Semaines restantes 4A</h3>
-<div id="w2" class="big"></div>
-</div>
+        <div class="card year y5">
+            <span class="badge">5A</span>
+            <div class="block">
+                <div class="label">⏳ Temps avant la fin de l'année</div>
+                <div id="c3" class="big"></div>
+                <div id="c3s" class="sub"></div>
+            </div>
+            <div class="divider"></div>
+            <div class="block">
+                <div class="label">🗓️ Semaines de cours restantes</div>
+                <div id="w3" class="big"></div>
+                <div class="bar"><i id="b3"></i></div>
+                <div id="w3s" class="sub"></div>
+            </div>
+        </div>
 
-<div class="card">
-<h3>Semaines restantes 5A</h3>
-<div id="w3" class="big"></div>
-</div>
-
+    </div>
 </div>
 
 </div>
 
 <script>
 
-const diploma=new Date("2028-09-30T23:59:59");
+const diploma = new Date("2028-09-30T23:59:59");
+const studyStart = new Date("2025-10-13");
+const monthlySalary = 1291.61;
 
-const schoolPeriods=[
+const schoolPeriods = [
 
 // ===== 3A =====
-
 ["2025-10-13","2025-10-17"],
 ["2025-10-20","2025-10-24"],
 
@@ -184,9 +320,7 @@ const schoolPeriods=[
 ["2026-06-29","2026-07-03"],
 ["2026-07-06","2026-07-10"],
 
-
 // ===== 4A =====
-
 ["2026-08-31","2026-09-04"],
 ["2026-09-07","2026-09-11"],
 
@@ -215,9 +349,7 @@ const schoolPeriods=[
 ["2027-04-19","2027-04-23"],
 ["2027-04-26","2027-04-30"],
 
-
 // ===== 5A =====
-
 ["2027-08-30","2027-09-03"],
 ["2027-09-06","2027-09-10"],
 ["2027-09-13","2027-09-17"],
@@ -250,128 +382,123 @@ const schoolPeriods=[
 
 ];
 
-const dates=[
-["c1",new Date("2026-07-10")],
-["c2",new Date("2027-04-30")],
-["c3",new Date("2028-05-05")]
-];
+// Fin de chaque année (id du bloc, date)
+const yearEnds = {
+    1: new Date("2026-07-10T23:59:59"),
+    2: new Date("2027-04-30T23:59:59"),
+    3: new Date("2028-05-05T23:59:59")
+};
 
-const monthlySalary=1291.61;
-const studyStart=new Date("2025-10-13");
+// Début de chaque année (pour la barre de progression du temps)
+const yearStarts = {
+    1: new Date("2025-10-13"),
+    2: new Date("2026-08-31"),
+    3: new Date("2027-08-30")
+};
 
-function fmt(d){
-
-let diff=d-new Date();
-
-if(diff<=0){
-return "Terminé ✅";
+function yearOf(period){
+    const start = new Date(period[0]);
+    if(start < new Date("2026-08-01")) return 1;
+    if(start < new Date("2027-08-01")) return 2;
+    return 3;
 }
 
-let days=Math.floor(diff/86400000);
-
-return days+" jours<br>"+(days/7).toFixed(1)+" semaines";
-
+function endOf(period){
+    const e = new Date(period[1]);
+    e.setHours(23,59,59,999);
+    return e;
 }
 
-function remainingSchool(){
+function pad(n){ return String(n).padStart(2,"0"); }
 
-let now=new Date();
+function pct(x){ return Math.max(0, Math.min(100, x)); }
 
-return schoolPeriods.filter(p=>{
+function countdown(target, idMain, idSub){
+    const diff = target - new Date();
+    const main = document.getElementById(idMain);
+    const sub = document.getElementById(idSub);
 
-let end=new Date(p[1]);
-end.setHours(23,59,59,999);
+    if(diff <= 0){
+        main.textContent = "Terminé ✅";
+        main.classList.add("done");
+        sub.textContent = "";
+        return;
+    }
 
-return now<=end;
+    const days = Math.floor(diff / 86400000);
+    const h = Math.floor(diff % 86400000 / 3600000);
+    const m = Math.floor(diff % 3600000 / 60000);
+    const s = Math.floor(diff % 60000 / 1000);
 
-}).length;
-
+    main.textContent = days + (days > 1 ? " jours" : " jour");
+    sub.textContent = (days / 7).toFixed(1) + " semaines · "
+        + pad(h) + ":" + pad(m) + ":" + pad(s);
 }
 
-function remainingYearWeeks(year){
-
-let now=new Date();
-
-return schoolPeriods.filter(p=>{
-
-let start=new Date(p[0]);
-let end=new Date(p[1]);
-
-let currentYear;
-
-if(start<new Date("2026-08-01")){
-currentYear=3;
-}
-else if(start<new Date("2027-08-01")){
-currentYear=4;
-}
-else{
-currentYear=5;
-}
-
-return currentYear===year && now<=end;
-
-}).length;
-
+function weeksFor(year){
+    const now = new Date();
+    const list = schoolPeriods.filter(p => yearOf(p) === year);
+    const remaining = list.filter(p => now <= endOf(p)).length;
+    return { total: list.length, remaining: remaining };
 }
 
 function moneyEarned(){
+    const now = new Date();
+    if(now < studyStart) return "0,00 €";
 
-let now=new Date();
+    const avgMonthMs = 30.4375 * 24 * 60 * 60 * 1000;
+    const money = (now - studyStart) / avgMonthMs * monthlySalary;
 
-if(now<studyStart){
-return "0.00 €";
-}
-
-let elapsed=now-studyStart;
-
-const avgMonthMs=30.4375*24*60*60*1000;
-
-let money=(elapsed/avgMonthMs)*monthlySalary;
-
-return money.toLocaleString(
-"fr-FR",
-{
-minimumFractionDigits:2,
-maximumFractionDigits:2
-}
-)+" €";
-
+    return money.toLocaleString("fr-FR", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+    }) + " €";
 }
 
 function upd(){
 
-document.getElementById("diploma").innerHTML=fmt(diploma);
+    const now = new Date();
 
-document.getElementById("weeks").innerHTML=
-remainingSchool()+" semaines";
+    document.getElementById("today").textContent =
+        now.toLocaleDateString("fr-FR", {
+            weekday:"long", day:"numeric", month:"long", year:"numeric"
+        });
 
-document.getElementById("money").innerHTML=
-moneyEarned();
+    // Diplôme
+    countdown(diploma, "diploma", "diplomaSub");
+    document.getElementById("diplomaBar").style.width =
+        pct((now - studyStart) / (diploma - studyStart) * 100) + "%";
 
-dates.forEach(d=>{
+    // Semaines globales
+    const all = schoolPeriods.filter(p => now <= endOf(p)).length;
+    const total = schoolPeriods.length;
+    document.getElementById("weeks").textContent =
+        all + (all > 1 ? " semaines" : " semaine");
+    document.getElementById("weeksSub").textContent =
+        (total - all) + " faites sur " + total;
+    document.getElementById("weeksBar").style.width =
+        pct((total - all) / total * 100) + "%";
 
-document.getElementById(d[0]).innerHTML=
-fmt(d[1]);
+    // Argent
+    document.getElementById("money").textContent = moneyEarned();
 
-});
+    // Par année
+    [1,2,3].forEach(y => {
+        countdown(yearEnds[y], "c" + y, "c" + y + "s");
 
-document.getElementById("w1").innerHTML=
-remainingYearWeeks(3)+" semaines";
-
-document.getElementById("w2").innerHTML=
-remainingYearWeeks(4)+" semaines";
-
-document.getElementById("w3").innerHTML=
-remainingYearWeeks(5)+" semaines";
-
+        const w = weeksFor(y);
+        document.getElementById("w" + y).textContent =
+            w.remaining + (w.remaining > 1 ? " semaines" : " semaine");
+        document.getElementById("w" + y + "s").textContent =
+            (w.total - w.remaining) + " faites sur " + w.total;
+        document.getElementById("b" + y).style.width =
+            pct((w.total - w.remaining) / w.total * 100) + "%";
+    });
 }
 
 upd();
-
-setInterval(upd,1000);
+setInterval(upd, 1000);
 
 </script>
-
 </body>
 </html>
